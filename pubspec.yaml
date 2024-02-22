@@ -1,6 +1,6 @@
 name: shakesco_country
 description: "Shakesco country picker"
-version: 0.0.3
+version: 0.0.4
 homepage: https://github.com/21fahm/shakesco-country
 
 environment:
@@ -8,6 +8,7 @@ environment:
   flutter: ">=1.17.0"
 
 dependencies:
+  country_list_pick: ^1.0.1+6
   flutter:
     sdk: flutter
 
