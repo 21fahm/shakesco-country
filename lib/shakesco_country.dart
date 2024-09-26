@@ -1,10 +1,17 @@
 library shakesco_country;
 
-import 'package:flutter/material.dart';
+import 'dart:ui';
+
+import 'package:shakesco_country/country_selection_theme.dart';
+import 'package:shakesco_country/selection_list.dart';
 import 'package:shakesco_country/selection/code_countries_en.dart';
 import 'package:shakesco_country/selection/code_country.dart';
-import 'package:shakesco_country/selection_list.dart';
-import 'dart:ui';
+import 'package:shakesco_country/selection/code_countrys.dart';
+import 'package:flutter/material.dart';
+
+export 'selection/code_country.dart';
+
+export 'country_selection_theme.dart';
 
 class CountryListPick extends StatefulWidget {
   CountryListPick({

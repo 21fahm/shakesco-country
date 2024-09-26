@@ -1,9 +1,7 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'dart:ui';
 
-import 'package:shakesco_country/selection/code_country.dart';
+import './shakesco_country.dart';
 
 class SelectionList extends StatefulWidget {
   SelectionList(this.elements, this.initialSelection, {Key? key})
