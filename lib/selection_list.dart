@@ -1,26 +1,16 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'dart:ui';
 
-import './shakesco_country.dart';
+import 'package:shakesco_country/selection/code_country.dart';
 
 class SelectionList extends StatefulWidget {
-  SelectionList(this.elements, this.initialSelection,
-      {Key? key,
-      this.appBar,
-      this.theme,
-      this.countryBuilder,
-      this.useUiOverlay = true,
-      this.useSafeArea = false})
+  SelectionList(this.elements, this.initialSelection, {Key? key})
       : super(key: key);
 
-  final PreferredSizeWidget? appBar;
   final List elements;
   final CountryCode? initialSelection;
-  final CountryTheme? theme;
-  final Widget Function(BuildContext context, CountryCode)? countryBuilder;
-  final bool useUiOverlay;
-  final bool useSafeArea;
 
   @override
   _SelectionListState createState() => _SelectionListState();
@@ -63,134 +53,121 @@ class _SelectionListState extends State<SelectionList> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.useUiOverlay)
-      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-        statusBarColor: Colors.blueGrey.shade200,
-        statusBarIconBrightness: Brightness.dark,
-        systemNavigationBarColor: Colors.white,
-        systemNavigationBarIconBrightness: Brightness.dark,
-        statusBarBrightness: !kIsWeb ? Brightness.dark : Brightness.light,
-      ));
     height = MediaQuery.of(context).size.height;
-    Widget scaffold = Scaffold(
-      appBar: widget.appBar,
-      body: Container(
-        color: Colors.blueGrey.shade200,
-        child: LayoutBuilder(builder: (context, contrainsts) {
-          diff = height - contrainsts.biggest.height;
-          _heightscroller = (contrainsts.biggest.height) / _alphabet.length;
-          _sizeheightcontainer = (contrainsts.biggest.height);
-          return Stack(
-            children: <Widget>[
-              CustomScrollView(
-                controller: _controllerScroll,
-                physics: const AlwaysScrollableScrollPhysics(),
-                slivers: [
-                  SliverToBoxAdapter(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: Text(
-                            widget.theme?.searchText ?? 'SEARCH',
-                            style: TextStyle(
-                                color:
-                                    widget.theme?.labelColor ?? Colors.black),
-                          ),
-                        ),
-                        Container(
-                          color: Colors.blueGrey.shade200,
-                          child: TextField(
-                            controller: _controller,
-                            style: TextStyle(fontSize: 14, color: Colors.white),
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                              focusedBorder: InputBorder.none,
-                              enabledBorder: InputBorder.none,
-                              errorBorder: InputBorder.none,
-                              disabledBorder: InputBorder.none,
-                              contentPadding: EdgeInsets.only(
-                                  left: 15, bottom: 0, top: 0, right: 15),
-                              hintStyle: TextStyle(color: Colors.white),
-                              hintText:
-                                  widget.theme?.searchHintText ?? "Search...",
-                            ),
-                            onChanged: _filterElements,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: Text(
-                            widget.theme?.lastPickText ?? 'LAST PICK',
-                            style: TextStyle(
-                                color:
-                                    widget.theme?.labelColor ?? Colors.black),
-                          ),
-                        ),
-                        Container(
-                          color: Colors.blueGrey.shade200,
-                          child: Material(
-                            color: Colors.transparent,
-                            child: ListTile(
-                              leading: Image.asset(
-                                widget.initialSelection!.flagUri!,
-                                package: 'country_list_pick',
-                                width: 32.0,
-                              ),
-                              title: Text(widget.initialSelection!.name!),
-                              trailing: Padding(
-                                padding: const EdgeInsets.only(right: 20.0),
-                                child: Icon(Icons.check, color: Colors.green),
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 15),
-                      ],
-                    ),
+
+    return Scaffold(
+      backgroundColor: Colors.blueGrey.shade200,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+      ),
+      body: Center(
+        child: Container(
+          width: MediaQuery.of(context).size.width * 0.9,
+          height: MediaQuery.of(context).size.height * 0.8,
+          child: Stack(
+            children: [
+              // Gradient background and glassmorphic effect
+              Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.bottomLeft,
+                    end: Alignment.topRight,
+                    colors: [
+                      Color(0x66C084E9),
+                      Color(0x66D16EBE),
+                      Color(0x66FFD2B2),
+                    ],
                   ),
-                  SliverList(
-                    delegate: SliverChildBuilderDelegate((context, index) {
-                      return widget.countryBuilder != null
-                          ? widget.countryBuilder!(
-                              context, countries.elementAt(index))
-                          : getListCountry(countries.elementAt(index));
-                    }, childCount: countries.length),
-                  )
-                ],
-              ),
-              if (isShow == true)
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: GestureDetector(
-                    onVerticalDragUpdate: _onVerticalDragUpdate,
-                    onVerticalDragStart: _onVerticalDragStart,
-                    child: Container(
-                      height: 20.0 * 30,
-                      color: Colors.transparent,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: []..addAll(
-                            List.generate(_alphabet.length,
-                                (index) => _getAlphabetItem(index)),
-                          ),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 4.0, sigmaY: 4.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: Colors.white.withOpacity(0.13)),
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Colors.white.withOpacity(0.15),
+                          Colors.white.withOpacity(0.05),
+                        ],
                       ),
                     ),
                   ),
                 ),
+              ),
+              // Content
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    // Search bar
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: TextField(
+                        controller: _controller,
+                        cursorColor: Colors.purple,
+                        style: const TextStyle(color: Colors.white),
+                        onChanged: _filterElements,
+                        decoration: InputDecoration(
+                          hintText: 'Search countries...',
+                          prefixIcon: Icon(Icons.search, color: Colors.white70),
+                          hintStyle:
+                              TextStyle(color: Colors.white.withOpacity(0.7)),
+                          border: InputBorder.none,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 16),
+                    // Country list
+                    Expanded(
+                      child: Stack(
+                        children: [
+                          ListView.builder(
+                            controller: _controllerScroll,
+                            itemCount: countries.length,
+                            itemBuilder: (context, index) =>
+                                getListCountry(countries.elementAt(index)),
+                          ),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: GestureDetector(
+                              onVerticalDragUpdate: _onVerticalDragUpdate,
+                              onVerticalDragStart: _onVerticalDragStart,
+                              child: Container(
+                                width: 40,
+                                color: Colors.transparent,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: List.generate(_alphabet.length,
+                                      (index) => _getAlphabetItem(index)),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ],
-          );
-        }),
+          ),
+        ),
       ),
     );
-    return widget.useSafeArea ? SafeArea(child: scaffold) : scaffold;
   }
 
   Widget getListCountry(CountryCode e) {
     return Container(
       height: 50,
-      color: Colors.blueGrey.shade200,
+      color: Colors.transparent,
       child: Material(
         color: Colors.transparent,
         child: ListTile(
@@ -199,7 +176,7 @@ class _SelectionListState extends State<SelectionList> {
             package: 'country_list_pick',
             width: 30.0,
           ),
-          title: Text(e.name!),
+          title: Text(e.name!, style: TextStyle(color: Colors.white)),
           onTap: () {
             _sendDataBack(context, e);
           },
@@ -230,27 +207,29 @@ class _SelectionListState extends State<SelectionList> {
         },
         child: Container(
           width: 40,
-          height: 20,
+          height: 30,
           alignment: Alignment.center,
+          padding: EdgeInsets.only(bottom: 2),
           decoration: BoxDecoration(
             color: index == posSelected
-                ? widget.theme?.alphabetSelectedBackgroundColor ?? Colors.blue
+                ? Colors.purpleAccent.shade400
                 : Colors.transparent,
             shape: BoxShape.circle,
           ),
-          child: Text(
-            _alphabet[index],
-            textAlign: TextAlign.center,
-            style: (index == posSelected)
-                ? TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color:
-                        widget.theme?.alphabetSelectedTextColor ?? Colors.white)
-                : TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400,
-                    color: widget.theme?.alphabetTextColor ?? Colors.black),
+          child: Center(
+            child: Text(
+              _alphabet[index],
+              textAlign: TextAlign.center,
+              style: (index == posSelected)
+                  ? TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white)
+                  : TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.white),
+            ),
           ),
         ),
       ),
