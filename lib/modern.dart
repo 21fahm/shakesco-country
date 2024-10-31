@@ -155,6 +155,7 @@ class _FuturisticCountrySelectState extends State<FuturisticCountrySelect>
                                   ),
                                   child: Image.asset(
                                     widget.selectedFlag,
+                                    package: 'country_list_pick',
                                     fit: BoxFit.cover,
                                   ),
                                 ),
