@@ -1,6 +1,6 @@
 name: shakesco_country
 description: "Shakesco country picker"
-version: 0.0.12
+version: 0.0.13
 homepage: https://github.com/21fahm/shakesco-country
 
 environment:
