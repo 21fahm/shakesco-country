@@ -195,7 +195,6 @@ class _FuturisticCountrySelectState extends State<FuturisticCountrySelect>
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 24),
                         child: Row(
-                          mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Row(
@@ -239,33 +238,26 @@ class _FuturisticCountrySelectState extends State<FuturisticCountrySelect>
                                   ),
                                 ),
                                 const SizedBox(width: 16),
-                                // Enhanced country name with overflow protection
-                                Flexible(
-                                  child: AnimatedDefaultTextStyle(
-                                    duration: const Duration(milliseconds: 300),
-                                    style: TextStyle(
-                                      color: _isHovered
-                                          ? Colors.white.withValues(alpha: 1.0)
-                                          : Colors.white
-                                              .withValues(alpha: 0.92),
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w600,
-                                      letterSpacing: 0.5,
-                                      shadows: [
-                                        Shadow(
-                                          color: Colors.black
-                                              .withValues(alpha: 0.3),
-                                          offset: const Offset(0, 1),
-                                          blurRadius: 2,
-                                        ),
-                                      ],
-                                    ),
-                                    child: Text(
-                                      widget.selectedCountry,
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                    ),
+                                // Enhanced country name
+                                AnimatedDefaultTextStyle(
+                                  duration: const Duration(milliseconds: 300),
+                                  style: TextStyle(
+                                    color: _isHovered
+                                        ? Colors.white.withValues(alpha: 1.0)
+                                        : Colors.white.withValues(alpha: 0.92),
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w600,
+                                    letterSpacing: 0.5,
+                                    shadows: [
+                                      Shadow(
+                                        color:
+                                            Colors.black.withValues(alpha: 0.3),
+                                        offset: const Offset(0, 1),
+                                        blurRadius: 2,
+                                      ),
+                                    ],
                                   ),
+                                  child: Text(widget.selectedCountry),
                                 ),
                               ],
                             ),
