@@ -195,6 +195,7 @@ class _FuturisticCountrySelectState extends State<FuturisticCountrySelect>
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 24),
                         child: Row(
+                          mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Row(
@@ -239,7 +240,7 @@ class _FuturisticCountrySelectState extends State<FuturisticCountrySelect>
                                 ),
                                 const SizedBox(width: 16),
                                 // Enhanced country name with overflow protection
-                                Expanded(
+                                Flexible(
                                   child: AnimatedDefaultTextStyle(
                                     duration: const Duration(milliseconds: 300),
                                     style: TextStyle(

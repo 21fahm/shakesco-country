@@ -4,7 +4,8 @@ import 'dart:ui';
 import './shakesco_country.dart';
 
 class SelectionList extends StatefulWidget {
-  SelectionList(this.elements, this.initialSelection, this.hintText, {Key? key})
+  const SelectionList(this.elements, this.initialSelection, this.hintText,
+      {Key? key})
       : super(key: key);
 
   final List elements;
@@ -12,7 +13,7 @@ class SelectionList extends StatefulWidget {
   final CountryCode? initialSelection;
 
   @override
-  _SelectionListState createState() => _SelectionListState();
+  State<SelectionList> createState() => _SelectionListState();
 }
 
 class _SelectionListState extends State<SelectionList>
@@ -30,11 +31,11 @@ class _SelectionListState extends State<SelectionList>
   var diff = 0.0;
   var posSelected = 0;
   var height = 0.0;
-  late var _sizeheightcontainer;
-  late var _heightscroller;
-  var _text;
-  var _oldtext;
-  var _itemsizeheight = 60.0;
+  dynamic _sizeheightcontainer;
+  dynamic _heightscroller;
+  String? _text;
+  String? _oldtext;
+  final _itemsizeheight = 60.0;
   double _offsetContainer = 0.0;
   bool isShow = true;
 
@@ -93,7 +94,7 @@ class _SelectionListState extends State<SelectionList>
     Navigator.pop(context, initialSelection);
   }
 
-  List _alphabet =
+  final List _alphabet =
       List.generate(26, (i) => String.fromCharCode('A'.codeUnitAt(0) + i));
 
   @override
