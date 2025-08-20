@@ -19,32 +19,44 @@ class FuturisticCountrySelect extends StatefulWidget {
 }
 
 class _FuturisticCountrySelectState extends State<FuturisticCountrySelect>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   late AnimationController _controller;
+  late AnimationController _shimmerController;
   late Animation<double> _scaleAnimation;
   late Animation<double> _glowAnimation;
+  late Animation<double> _shimmerAnimation;
   bool _isHovered = false;
 
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(
-      duration: const Duration(milliseconds: 200),
+      duration: const Duration(milliseconds: 300),
       vsync: this,
     );
 
-    _scaleAnimation = Tween<double>(begin: 1.0, end: 1.02).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    _shimmerController = AnimationController(
+      duration: const Duration(milliseconds: 1500),
+      vsync: this,
+    )..repeat();
+
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 1.03).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.elasticOut),
     );
 
     _glowAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+
+    _shimmerAnimation = Tween<double>(begin: -1.0, end: 2.0).animate(
+      CurvedAnimation(parent: _shimmerController, curve: Curves.easeInOut),
     );
   }
 
   @override
   void dispose() {
     _controller.dispose();
+    _shimmerController.dispose();
     super.dispose();
   }
 
@@ -62,124 +74,217 @@ class _FuturisticCountrySelectState extends State<FuturisticCountrySelect>
       child: GestureDetector(
         onTap: widget.onTap,
         child: AnimatedBuilder(
-          animation: _controller,
+          animation: Listenable.merge([_controller, _shimmerController]),
           builder: (context, child) {
             return Transform.scale(
               scale: _scaleAnimation.value,
               child: Container(
-                height: 56,
-                width: MediaQuery.of(context).size.width * 0.8,
+                height: 64,
+                width: MediaQuery.of(context).size.width * 0.92,
                 margin: const EdgeInsets.symmetric(horizontal: 16),
                 child: Stack(
                   children: [
-                    // Animated background gradient
-                    AnimatedContainer(
-                      duration: const Duration(milliseconds: 200),
+                    // Main container with enhanced gradient
+                    Container(
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                           colors: [
-                            Color(0xFF6366F1)
-                                .withOpacity(_isHovered ? 0.15 : 0.1),
-                            Color(0xFFA855F7)
-                                .withOpacity(_isHovered ? 0.15 : 0.1),
-                            Color(0xFFEC4899)
-                                .withOpacity(_isHovered ? 0.15 : 0.1),
+                            const Color(0xFF4F46E5)
+                                .withValues(alpha: _isHovered ? 0.25 : 0.18),
+                            const Color(0xFF7C3AED)
+                                .withValues(alpha: _isHovered ? 0.25 : 0.18),
+                            const Color(0xFFEC4899)
+                                .withValues(alpha: _isHovered ? 0.25 : 0.18),
+                            const Color(0xFFF59E0B)
+                                .withValues(alpha: _isHovered ? 0.2 : 0.15),
                           ],
                         ),
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(20),
                         border: Border.all(
-                          color: Colors.white.withOpacity(0.1),
-                          width: 1,
+                          color: _isHovered
+                              ? Colors.white.withValues(alpha: 0.3)
+                              : Colors.white.withValues(alpha: 0.15),
+                          width: _isHovered ? 1.5 : 1,
                         ),
                       ),
                     ),
+
+                    // Shimmer overlay effect
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: AnimatedOpacity(
+                        duration: const Duration(milliseconds: 300),
+                        opacity: _isHovered ? 0.4 : 0.2,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment(
+                                  -1.0 + _shimmerAnimation.value, -1.0),
+                              end:
+                                  Alignment(1.0 + _shimmerAnimation.value, 1.0),
+                              colors: [
+                                Colors.transparent,
+                                Colors.white.withValues(alpha: 0.1),
+                                Colors.white.withValues(alpha: 0.2),
+                                Colors.white.withValues(alpha: 0.1),
+                                Colors.transparent,
+                              ],
+                              stops: const [0.0, 0.4, 0.5, 0.6, 1.0],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+
                     // Glassmorphism effect
                     ClipRRect(
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(20),
                       child: BackdropFilter(
-                        filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+                        filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
                         child: Container(
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
                               colors: [
-                                Colors.white.withOpacity(0.1),
-                                Colors.white.withOpacity(0.05),
+                                Colors.white.withValues(
+                                    alpha: _isHovered ? 0.15 : 0.08),
+                                Colors.white
+                                    .withValues(alpha: _isHovered ? 0.1 : 0.04),
                               ],
                             ),
                           ),
                         ),
                       ),
                     ),
-                    // Glow effect
+
+                    // Enhanced glow effect
                     AnimatedContainer(
-                      duration: const Duration(milliseconds: 200),
+                      duration: const Duration(milliseconds: 300),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(20),
                         boxShadow: [
                           BoxShadow(
-                            color: Color(0xFF6366F1)
-                                .withOpacity(_glowAnimation.value * 0.2),
+                            color: const Color(0xFF4F46E5)
+                                .withValues(alpha: _glowAnimation.value * 0.4),
+                            blurRadius: 20,
+                            spreadRadius: -3,
+                            offset: const Offset(0, 4),
+                          ),
+                          BoxShadow(
+                            color: const Color(0xFFEC4899)
+                                .withValues(alpha: _glowAnimation.value * 0.3),
                             blurRadius: 15,
-                            spreadRadius: -2,
+                            spreadRadius: -5,
+                            offset: const Offset(-2, -2),
+                          ),
+                          BoxShadow(
+                            color: const Color(0xFF7C3AED)
+                                .withValues(alpha: _glowAnimation.value * 0.2),
+                            blurRadius: 25,
+                            spreadRadius: -1,
                           ),
                         ],
                       ),
                     ),
+
                     // Content
                     Positioned.fill(
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        padding: const EdgeInsets.symmetric(horizontal: 24),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Row(
                               children: [
-                                // Flag with subtle glow
-                                Container(
-                                  width: 32,
-                                  height: 24,
+                                // Enhanced flag container
+                                AnimatedContainer(
+                                  duration: const Duration(milliseconds: 300),
+                                  width: 36,
+                                  height: 26,
                                   decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(4),
+                                    borderRadius: BorderRadius.circular(6),
+                                    border: Border.all(
+                                      color:
+                                          Colors.white.withValues(alpha: 0.2),
+                                      width: 1,
+                                    ),
                                     boxShadow: [
                                       BoxShadow(
-                                        color: Colors.blue.withOpacity(
-                                            _glowAnimation.value * 0.3),
+                                        color: const Color(0xFF06B6D4)
+                                            .withValues(
+                                                alpha:
+                                                    _glowAnimation.value * 0.5),
+                                        blurRadius: 12,
+                                        spreadRadius: -3,
+                                      ),
+                                      BoxShadow(
+                                        color:
+                                            Colors.black.withValues(alpha: 0.1),
                                         blurRadius: 8,
-                                        spreadRadius: -2,
+                                        offset: const Offset(0, 2),
                                       ),
                                     ],
                                   ),
-                                  child: Image.asset(
-                                    widget.selectedFlag,
-                                    package: 'country_list_pick',
-                                    fit: BoxFit.cover,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(5),
+                                    child: Image.asset(
+                                      widget.selectedFlag,
+                                      package: 'country_list_pick',
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
                                 ),
-                                const SizedBox(width: 12),
-                                // Country name with modern typography
-                                Text(
-                                  widget.selectedCountry,
+                                const SizedBox(width: 16),
+                                // Enhanced country name
+                                AnimatedDefaultTextStyle(
+                                  duration: const Duration(milliseconds: 300),
                                   style: TextStyle(
-                                    color: Colors.white.withOpacity(0.9),
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500,
-                                    letterSpacing: 0.3,
+                                    color: _isHovered
+                                        ? Colors.white.withValues(alpha: 1.0)
+                                        : Colors.white.withValues(alpha: 0.92),
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w600,
+                                    letterSpacing: 0.5,
+                                    shadows: [
+                                      Shadow(
+                                        color:
+                                            Colors.black.withValues(alpha: 0.3),
+                                        offset: const Offset(0, 1),
+                                        blurRadius: 2,
+                                      ),
+                                    ],
                                   ),
+                                  child: Text(widget.selectedCountry),
                                 ),
                               ],
                             ),
-                            // Animated dropdown icon
-                            AnimatedRotation(
-                              duration: const Duration(milliseconds: 200),
-                              turns: _isHovered ? 0.125 : 0,
-                              child: Icon(
-                                Icons.expand_more_rounded,
-                                color: Colors.white.withOpacity(0.7),
-                                size: 24,
+                            // Enhanced dropdown icon with pulse effect
+                            AnimatedContainer(
+                              duration: const Duration(milliseconds: 300),
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                gradient: RadialGradient(
+                                  colors: [
+                                    Colors.white.withValues(
+                                        alpha: _isHovered ? 0.15 : 0.08),
+                                    Colors.transparent,
+                                  ],
+                                ),
+                              ),
+                              child: AnimatedRotation(
+                                duration: const Duration(milliseconds: 300),
+                                turns: _isHovered ? 0.125 : 0,
+                                child: Icon(
+                                  Icons.keyboard_arrow_down_rounded,
+                                  color: _isHovered
+                                      ? Colors.white.withValues(alpha: 0.9)
+                                      : Colors.white.withValues(alpha: 0.7),
+                                  size: 28,
+                                ),
                               ),
                             ),
                           ],
