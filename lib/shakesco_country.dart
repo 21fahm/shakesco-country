@@ -15,10 +15,12 @@ class CountryListPick extends StatefulWidget {
   CountryListPick({
     required this.onChanged,
     this.initialSelection,
+    this.hintText,
     this.pickerBuilder,
   });
 
   final String? initialSelection;
+  final String? hintText;
   final ValueChanged<CountryCode?> onChanged;
   final Widget Function(BuildContext context, CountryCode? countryCode)?
       pickerBuilder;
@@ -68,6 +70,7 @@ class _CountryListPickState extends State<CountryListPick> {
           builder: (context) => SelectionList(
             elements,
             selectedItem,
+            widget.hintText ?? 'Search country',
           ),
         ));
 

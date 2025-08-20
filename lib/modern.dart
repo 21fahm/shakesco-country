@@ -80,8 +80,8 @@ class _FuturisticCountrySelectState extends State<FuturisticCountrySelect>
               scale: _scaleAnimation.value,
               child: Container(
                 height: 64,
-                width: MediaQuery.of(context).size.width * 0.92,
-                margin: const EdgeInsets.symmetric(horizontal: 16),
+                width: MediaQuery.of(context).size.width * 0.95,
+                margin: const EdgeInsets.symmetric(horizontal: 10),
                 child: Stack(
                   children: [
                     // Main container with enhanced gradient
@@ -238,26 +238,33 @@ class _FuturisticCountrySelectState extends State<FuturisticCountrySelect>
                                   ),
                                 ),
                                 const SizedBox(width: 16),
-                                // Enhanced country name
-                                AnimatedDefaultTextStyle(
-                                  duration: const Duration(milliseconds: 300),
-                                  style: TextStyle(
-                                    color: _isHovered
-                                        ? Colors.white.withValues(alpha: 1.0)
-                                        : Colors.white.withValues(alpha: 0.92),
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w600,
-                                    letterSpacing: 0.5,
-                                    shadows: [
-                                      Shadow(
-                                        color:
-                                            Colors.black.withValues(alpha: 0.3),
-                                        offset: const Offset(0, 1),
-                                        blurRadius: 2,
-                                      ),
-                                    ],
+                                // Enhanced country name with overflow protection
+                                Expanded(
+                                  child: AnimatedDefaultTextStyle(
+                                    duration: const Duration(milliseconds: 300),
+                                    style: TextStyle(
+                                      color: _isHovered
+                                          ? Colors.white.withValues(alpha: 1.0)
+                                          : Colors.white
+                                              .withValues(alpha: 0.92),
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w600,
+                                      letterSpacing: 0.5,
+                                      shadows: [
+                                        Shadow(
+                                          color: Colors.black
+                                              .withValues(alpha: 0.3),
+                                          offset: const Offset(0, 1),
+                                          blurRadius: 2,
+                                        ),
+                                      ],
+                                    ),
+                                    child: Text(
+                                      widget.selectedCountry,
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                    ),
                                   ),
-                                  child: Text(widget.selectedCountry),
                                 ),
                               ],
                             ),
