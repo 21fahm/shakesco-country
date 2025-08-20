@@ -80,8 +80,8 @@ class _FuturisticCountrySelectState extends State<FuturisticCountrySelect>
               scale: _scaleAnimation.value,
               child: Container(
                 height: 64,
-                width: MediaQuery.of(context).size.width * 0.95,
-                margin: const EdgeInsets.symmetric(horizontal: 10),
+                width: MediaQuery.of(context).size.width * 0.92,
+                margin: const EdgeInsets.symmetric(horizontal: 16),
                 child: Stack(
                   children: [
                     // Main container with enhanced gradient
