@@ -238,11 +238,11 @@ class _FuturisticCountrySelectState extends State<FuturisticCountrySelect>
                                   ),
                                 ),
                                 const SizedBox(width: 16),
-                                // Enhanced country name with overflow protection
+                                // Enhanced country name with proper overflow protection
                                 SizedBox(
                                   width: MediaQuery.of(context).size.width *
                                           0.95 -
-                                      160, // Available width minus margins, flag, spacing, and icon
+                                      200, // Increased to 200 for better spacing
                                   child: AnimatedDefaultTextStyle(
                                     duration: const Duration(milliseconds: 300),
                                     style: TextStyle(

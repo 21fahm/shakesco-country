@@ -1,4 +1,4 @@
-## 0.0.16
+## 0.0.17
 
 - Change container design
 - Removed text overflow

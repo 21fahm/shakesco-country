@@ -93,6 +93,8 @@ class _SelectionListState extends State<SelectionList> {
                     vertical: 16,
                   ),
                 ),
+                cursorColor: Colors.purple,
+                maxLines: 1,
                 style: const TextStyle(
                   fontSize: 16,
                   color: Colors.black87,
