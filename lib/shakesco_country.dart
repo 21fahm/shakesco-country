@@ -70,7 +70,7 @@ class _CountryListPickState extends State<CountryListPick> {
           builder: (context) => SelectionList(
             elements,
             selectedItem,
-            widget.hintText ?? 'Search country',
+            widget.hintText ?? 'Search country here...',
           ),
         ));
 
